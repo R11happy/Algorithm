@@ -10,6 +10,8 @@ struct node
 
 node *root = NULL;
 
+
+
 // 生成一个新结点，v为结点权值
 node *newNode(int v)
 {
@@ -26,6 +28,19 @@ void search(node *root, int x, int newdata)
     if(root->data == x) root->data = newdata;   //找到数据域为x的结点，修改为newdata
     search(root->lchild, x, newdata);   //左子树递归搜索
     search(root->rchild, x, newdata);   //右子树递归搜索
+}
+
+// search函数查找二叉树中数据域为x的结点
+void search(node *root, int x)
+{
+    if(root == NULL)
+    {
+        printf("search failed\n");
+        return;
+    }
+    if(x == root->data) printf("%d\n",root->data );
+    else if(x < root->data) search(root->lchild, x);
+    else    search(root->rchild, x);
 }
 
 // insert函数将在二叉树中插入一个数据域为x的新节点
@@ -94,7 +109,7 @@ void LayerOrder(node *root)
 /*记录层号的层序遍历*/
 void LayerOrder(node *root)
 {
-    queue<node *> q;    //注意队列里存的是地址
+    queue<node*> q;    //注意队列里存的是地址
     root->layer = 1;    //根结点层号为1
     q.push(root);   //将根结点地址入队
     while(!q.empty())
@@ -141,4 +156,46 @@ node *create(int prel, int preR, int inL, int inR)
 
     return root;    //返回根结点地址
 }
+
+
+/*寻找以root为根结点的树中最大权值结点*/
+node *findMax(node *root)
+{
+    while(root->rchild != NULL) root = root->rchild;
+    return root;
+}
+
+// 寻找以root为根结点的树中的最小权值结点
+node *findMin(node *root)
+{
+    while(root->lchild != NULL) root = root->lchild;
+    return root;
+}
+
+void deleteNode(node *&root, int x)
+{
+    if(root == NULL)    return;
+    if(root->data == x)
+    {
+        // 叶子结点
+        if(root->lchild == NULL && root->rchild)    root = NULL;
+        // 左子树非空
+        else if(root->lchild != NULL)
+        {
+            node *pre = findMax(root->lchild);
+            root->data = pre->data;
+            deleteNode(root->lchild, pre->data);
+        }
+        // 右子树非空
+        else
+        {
+            node *next = findMin(root->rchild);
+            root->data = next->data;
+            deleteNode(root->rchild, next->data);
+        }
+    }
+    else if(root->data > x) deleteNode(root->lchild, x);
+    else    deleteNode(root->rchild, x);
+}
+
 
