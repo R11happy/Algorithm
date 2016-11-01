@@ -33,7 +33,7 @@ void generateP(int index)
             P[index] = x;   //把x加入当前排列
             hashTable[x] = true;    //记录x已经在P中
             generateP(index+1);     //处理完排列的第index+1号位
-            hashTable[x] = false;   //已经处理完P[index]为x的子问题，还原状态，进行 x++后的下一次判断
+            hashTable[x] = false;   //已经处理完P[index]  为x的子问题，还原状态，进行 x++后的下一次判断
         }
     }
 }

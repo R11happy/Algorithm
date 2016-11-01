@@ -199,3 +199,27 @@ void deleteNode(node *&root, int x)
 }
 
 
+/*输出叶子结点*/
+void PreOrderPrintLeaves(node *BT)
+{
+    if(BT)
+    {
+        if(!BT->lchild && !BT->rchild)  printf("%d",BT->data );
+        PreOrderPrintLeaves(BT->lchild);
+        PreOrderPrintLeaves(BT->rchild);
+    }
+}
+
+/*求二叉树的高度*/
+int PostOrderGetHeight(node *T)
+{
+    int HL, HR, MaxH;
+    if(T)
+    {
+        HL = PostOrderGetHeight(T->lchild);
+        HR = PostOrderGetHeight(T->rchild);
+        MaxH = (HL > HR)?HL:HR;
+        return(MaxH+1);
+    }
+    else return 0;
+}
