@@ -201,20 +201,18 @@ void Dijkstra(int s)
                 MIN = d[j];
             }
         }
+        // 找不到小于INF的d[u],说明剩下的顶点和起点s不连通
+        if(u == -1) return;
+        vis[u] = true;  //标记u为已访问
+        for(int v = 0; v<n; v++)    //如果v未访问 && u能到达v && 以u为中介点可以使d[v]更优
+        {
+            if(vis[v] == false && G[u][v] != INF && d[u]+G[u][v] < d[v])
+            {
+                d[v] = d[u] + G[u][v];  //优化d[v]
+            }
+        }
     }
 }
-
-// 找不到小于INF的d[u],说明剩下的顶点和起点s不连通
-if(u == -1) return;
-vis[u] = true;  //标记u为已访问
-for(int v = 0; v<n; v++)    //如果v未访问 && u能到达v && 以u为中介点可以使d[v]更优
-{
-    if(vis[v] == false && G[u][v] != INF && d[u]+G[u][v] < d[v])
-    {
-        d[v] = d[u] + G[u][v];  //优化d[v]
-    }
-}
-
 
 // 邻接表版
 struct Node
