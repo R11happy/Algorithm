@@ -252,3 +252,51 @@ void Dijkstra(int s)
         }
     }
 }
+
+
+/*最小生成树*/
+// Prim算法
+int n, G[MAXV][MAXV];
+int d[MAXV];    //顶点与集合S的最短距离
+bool vis[MAXV] = {false};
+
+int Prim(int s) //起点为s
+{
+    for (int i = 0; i<MAXV; i++)
+    {
+        d[i] = INF;
+        pre[i] = 0;
+        vis[i] = false;
+    }
+    d[s] = 0;   //只有s号顶点到集合S的距离为0，其余全部为INF
+    int ans = 0;    //存放最小生成树的边权之和
+    for(int i = 0; i<n; i++)
+    {
+        int u = -1, MIN = INF;  //u使得d[u]最小，MIN记录该最小的d[u]
+        // 寻找未访问顶点中d[]最小的
+        for(int j = 0; j<n; j++)
+        {
+            if(vis[j] == false && d[j] < MIN)
+            {
+                u = j;
+                MIN = d[j];
+            }
+        }
+
+        // 找不到小于INF的d[u]，则剩下的顶点和集合S不联通
+        if(u == -1) return -1;
+        vis[u] = true;  //标记u为已访问
+        ans += d[u];    //将与集合S距离最小的边加入最小生成树
+        for(int v = 0; v<n; v++)
+        {
+            // v未访问&&u能到达v&&以u为中介点可以使v离集合S更近
+            if(vis[v] == false && G[u][v] != INF && G[u][v] < d[v])
+            {
+                d[v] = G[u][v];
+                pre[v] = u; //记录v的前驱节点u
+            }
+        }
+
+    }
+    return ans; //返回最小生成树的边权之和
+}
